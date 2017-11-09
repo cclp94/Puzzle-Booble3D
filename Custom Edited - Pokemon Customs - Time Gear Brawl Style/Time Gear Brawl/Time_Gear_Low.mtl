@@ -1,0 +1,4 @@
+newmtl gearitem
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd itmTimeGear.png
