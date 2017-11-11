@@ -1,0 +1,19 @@
+﻿<Properties StartupConfiguration="{44E1AD1C-8A84-0CF6-F062-E0529EB0F328}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/CannonArrow.cs">
+    <Files>
+      <File FileName="Assets/Scripts/CannonArrow.cs" Line="37" Column="50" />
+      <File FileName="Assets/Scripts/Bubble.cs" Line="130" Column="63" />
+      <File FileName="Assets/Scripts/Grid.cs" Line="317" Column="123" />
+      <File FileName="Assets/Wall.cs" Line="33" Column="12" />
+      <File FileName="Assets/Scripts/WallMesh.cs" Line="15" Column="61" />
+      <File FileName="Assets/Scripts/Spline.cs" Line="226" Column="48" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.Bust-a-Move3D PreferredExecutionTarget="Unity.Editor" />
+  <MultiItemStartupConfigurations />
+</Properties>

@@ -16,6 +16,7 @@ public class Bubble : MonoBehaviour {
     private bool isDropping;
     private bool isPopping;
     private Animator animator;
+    private Rigidbody mRigidBody;
 
     // Use this for initialization
     void Start () {
@@ -23,6 +24,8 @@ public class Bubble : MonoBehaviour {
         isPopping = false;
         targetHit = false;
         bubbleGrid = GameObject.Find("BubbleGrid").GetComponent<Grid>();
+        mRigidBody = GetComponent<Rigidbody>();
+        this.GetComponent<Rigidbody>().isKinematic = true;
         //animator = GetComponent<Animator>();
     }
 	
@@ -33,20 +36,25 @@ public class Bubble : MonoBehaviour {
         if (hasLaunched)
         {
             Vector2 v = Rotate(Vector2.up, -movementAngle);
-            //GetComponent<Rigidbody>().AddForceAtPosition((new Vector3(v.x, 0.0f, v.y) * speed * Time.deltaTime), transform.position, ForceMode.)
-            GetComponent<Rigidbody>().MovePosition(transform.position + (new Vector3(v.x, 0.0f, v.y) * speed * Time.deltaTime));
-            transform.Rotate(new Vector3(v.y, 0.0f, -v.x).normalized, 10.0f);
+			//GetComponent<Rigidbody>().AddForceAtPosition((new Vector3(v.x, 0.0f, v.y) * speed * Time.deltaTime), transform.position, ForceMode.)
+			//GetComponent<Rigidbody>().MovePosition(transform.position + (new Vector3(v.x, 0.0f, v.y) * speed * Time.deltaTime));
+			//transform.Rotate(new Vector3(v.y, 0.0f, -v.x).normalized, 10.0f);
+            //mRigidBody.AddRelativeForce(Vector3.up);
+			if (transform.position.z < -16)
+			{
+				DestroyBubbleObject();
+			}
         }
         if (isDropping)
         {
             GetComponent<Rigidbody>().isKinematic = false;
             GetComponent<Rigidbody>().useGravity = true;
-            //GetComponent<Rigidbody>().MovePosition(transform.position + (new Vector3(0.0f, 0.0f, -1.0f) * speed*1.5f * Time.deltaTime));
-            //transform.Rotate(new Vector3(1.0f, 0.0f, 0.0f).normalized, -5.0f);
-            if (transform.position.z < -13)
-            {
-                DestroyBubbleObject();
-            }
+			//GetComponent<Rigidbody>().MovePosition(transform.position + (new Vector3(0.0f, 0.0f, -1.0f) * speed*1.5f * Time.deltaTime));
+			//transform.Rotate(new Vector3(1.0f, 0.0f, 0.0f).normalized, -5.0f);
+			if (transform.position.z < -13)
+			{
+				DestroyBubbleObject();
+			}
         }
 	}
 
@@ -78,10 +86,33 @@ public class Bubble : MonoBehaviour {
 
     public void launch(float eulerAngle)
     {
-        movementAngle = eulerAngle;
-        hasLaunched = true;
-        this.GetComponent<Rigidbody>().isKinematic = false;
-    }
+		// Find initial velocity
+		movementAngle = eulerAngle;
+		hasLaunched = true;
+		this.GetComponent<Rigidbody>().isKinematic = false;
+		this.GetComponent<Rigidbody>().useGravity = true;
+		Vector2 v = Rotate(Vector2.up, -movementAngle);
+        RaycastHit hit;
+        Collider finalCol = null;
+        Vector3 initPos = transform.position;
+        Vector3 dir = new Vector3(v.x, 0.0f, v.y);
+        float distance = 0;
+        do
+        {
+            if(Physics.Raycast(initPos, dir, out hit)){
+                distance += hit.distance;
+                initPos = hit.point;
+                dir = Vector3.Reflect(dir, hit.normal);
+                finalCol = hit.collider;
+            }
+        } while (finalCol.gameObject.tag != "Bubble" && finalCol.gameObject.tag != "WallTop");
+        //finalCol.gameObject.transform.position = new Vector3(finalCol.gameObject.transform.position.x, finalCol.gameObject.transform.position.y + 1, finalCol.gameObject.transform.position.z);
+        print("Distance:" +distance);
+        float initVel = 1 - (2*-0.7f * distance);
+        print("Initial velocity: " + initVel);
+        GetComponent<Rigidbody>().AddForceAtPosition((new Vector3(v.x, 0.0f, v.y) * initVel), transform.position, ForceMode.Impulse);
+
+	}
 
     public bool hitTarget()
     {
@@ -90,18 +121,30 @@ public class Bubble : MonoBehaviour {
     Collision lastCollision = null;
     void OnCollisionEnter(Collision coll)
     {
-        if (coll.gameObject.tag.Equals("Bubble") && !this.GetComponent<Rigidbody>().isKinematic || coll.gameObject.tag.Equals("WallTop") & !hitTarget())
+        if (hasLaunched && coll.gameObject.tag.Equals("Bubble") && !this.GetComponent<Rigidbody>().isKinematic || coll.gameObject.tag.Equals("WallTop") & !hitTarget())
         {
             hasLaunched = false;
             targetHit = true;
-            this.GetComponent<Rigidbody>().isKinematic = true;
+
             bubbleGrid.SetInGrid(this.gameObject);
+            this.GetComponent<Rigidbody>().isKinematic = true;
         }
         else if (coll.gameObject.tag.Equals("Wall") && coll != lastCollision)
         {
-            Debug.Log("collide to wall");
-            lastCollision = coll;
+           // Debug.Log("collide to wall");
+           // lastCollision = coll;
             movementAngle = -movementAngle;
+			Vector3 oldVelocity = this.GetComponent<Rigidbody>().velocity;
+			ContactPoint hit = coll.contacts[0];
+            print(this.GetComponent<Rigidbody>().velocity);
+            print(hit.normal);
+            Vector3 reflection = Vector3.Reflect(oldVelocity, -hit.normal);
+            //this.GetComponent<Rigidbody>().velocity = reflection;
+            print(this.GetComponent<Rigidbody>().velocity);
+			Quaternion rotation = Quaternion.FromToRotation(oldVelocity, reflection);
+			//transform.rotation = rotation * transform.rotation;
+			//rotationX = transform.rotation.x;
+			//rotationY = transform.rotation.y;
         }
     }
 

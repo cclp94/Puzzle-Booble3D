@@ -98,11 +98,13 @@ public class Grid : MonoBehaviour {
 
     public void SetInGrid(GameObject bubble)
     {
+        float oldY = bubble.transform.localPosition.y;
         bubble.transform.parent = transform;
         Vector2 gridPos = FindGridCoodinates(bubble.transform.localPosition);
         int row = (int)gridPos.x, col = (int)gridPos.y;
         Debug.Log("Set in grid: (" + bubble.transform.localPosition.x + ", " + bubble.transform.localPosition.z + ") => (" + row + ", " + col + ")");
         bubble.transform.localPosition = GetGridWordlPostion(row, col);
+        bubble.transform.localPosition.Set(bubble.transform.localPosition.x,oldY,bubble.transform.localPosition.z);
         bubbleGrid[row, col] = bubble;
         cannonPoiter.SendMessage("updateQueue");
         FindAndClearCluster(row, col);
