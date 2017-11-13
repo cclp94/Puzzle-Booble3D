@@ -34,7 +34,6 @@ public class LevelManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
 	}
 
     public void onMainMenuLevelChoose(string name)
@@ -44,10 +43,10 @@ public class LevelManager : MonoBehaviour {
 
     void loadScene(string name)
     {
+        bool isMenu = name == "Menu";
         UnityEngine.SceneManagement.SceneManager.LoadScene(name);
-        gameObject.SetActive(false);
-        if (name != "Menu")
-            scoreBoard.SetActive(true);
+        gameObject.SetActive(isMenu);
+        scoreBoard.SetActive(!isMenu);
     }
 
     public void gameWon(string sceneLoaded){

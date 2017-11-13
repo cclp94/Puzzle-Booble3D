@@ -1,8 +1,0 @@
-newmtl mark
-Kd 0.800000 0.800000 0.800000
-Tf 1.000000 1.000000 1.000000
-illum 1
-d 0.000000
-Ni 1.000000
-map_Kd figTimeGearMark.png
-map_d figTimeGearMark.png

@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: fc51da728c80afb47a16f5ca04856ee6
+timeCreated: 1510525049
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Zian
+  fontNames:
+  - Zian
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -43,7 +43,11 @@ public class GameScore : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         scoreText.text = scoreAmount.ToString("D9");
-	}
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            LevelManager.Instance.onMainMenuLevelChoose("Menu");
+        }
+    }
 
     public void addToScore(int value)
     {

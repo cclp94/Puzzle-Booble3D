@@ -18,6 +18,8 @@ public class Grid : MonoBehaviour {
     public GameObject RowPrefab;
     [SerializeField]
     public Transform deadLinePosition;
+    [SerializeField]
+    public bool offsetWallEnable;
 
     private static float bubbleOffset1 = 1.05f;
     private static float bubbleOffset2 = bubbleOffset1 * 2;
@@ -113,6 +115,8 @@ public class Grid : MonoBehaviour {
         {
             timesFired = 0;
             addRow();
+            if(offsetWallEnable)
+                OffsetWall();
         }
         int bubblesLeft = FindBubblesLeft();
         Debug.Log("Bubbles Left:" + bubblesLeft);
@@ -132,6 +136,11 @@ public class Grid : MonoBehaviour {
             }
         }
         
+    }
+
+    private void OffsetWall()
+    {
+        FindObjectOfType<WallMesh>().OffsetWall() ;
     }
 
     private int FindBubblesLeft()
@@ -182,12 +191,12 @@ public class Grid : MonoBehaviour {
         List<Vector2> done = new List<Vector2>();
         toBeAnalysed.Add(new Vector2(row, col));
         FindCluster(ref toBeAnalysed, ref done);
-        string debugClust = "";
-        foreach (Vector2 c in done)
+        //string debugClust = "";
+        /*foreach (Vector2 c in done)
         {
             debugClust += "(" + c.x + ", " + c.y + ")\t";
-        }
-        Debug.Log(debugClust);
+        }*/
+        //Debug.Log(debugClust);
         if (done.Count > 2)
         {
             addPoints(done.Count * 10);
@@ -214,23 +223,23 @@ public class Grid : MonoBehaviour {
 
     private void CheckHangingBubbles(ref List<Vector2> done)
     {
-        Debug.Log("Check hanging");
+        //Debug.Log("Check hanging");
         // Get connected bubble to the popping ones
         List<Vector2> hanging = new List<Vector2>();
         foreach (Vector2 v in done)
         {
             List<Vector2> neighbors = GetAdjancentBubbles(v);
-            Debug.Log("Neighbors from " + v + ": " + neighbors.Count);
+            //Debug.Log("Neighbors from " + v + ": " + neighbors.Count);
             foreach(Vector2 v2 in neighbors)
             {
                 if (v2.x != 0)
                 {
                     List<Vector2> connected = FindAllConnectedBubbles(v2);
-                    Debug.Log("Connected to " + v2 + ": " + connected.Count);
+                    //Debug.Log("Connected to " + v2 + ": " + connected.Count);
                     if (connected.FindIndex(x => x.x == 0.0f) == -1)
                     {
                         hanging = hanging.Union(connected).ToList();
-                        Debug.Log("Hanging: " + hanging.Count);
+                       // Debug.Log("Hanging: " + hanging.Count);
                     }
                 }
             }
@@ -240,7 +249,7 @@ public class Grid : MonoBehaviour {
 
     private void ClearCluster(ref List<Vector2> done)
     {
-        Debug.Log("Playing bubble burst sound");
+        //Debug.Log("Playing bubble burst sound");
         //popSound.Play();
         foreach (Vector2 bubble in done)
         {
@@ -303,10 +312,10 @@ public class Grid : MonoBehaviour {
             List<Vector2> sameColorNeighbors = GetSameColorAdjancentBubbles(toAnalyse[i]);
             foreach(Vector2 bubble in sameColorNeighbors)
             {
-                Debug.Log(bubble.x + ", " + bubble.y);
+                //Debug.Log(bubble.x + ", " + bubble.y);
                 if (!done.Contains(bubble) && !toAnalyse.Contains(bubble))
                     toAnalyse.Add(bubble);
-                Debug.Log(bubble);
+                //Debug.Log(bubble);
             }
             done.Add(toAnalyse[i]);
         }

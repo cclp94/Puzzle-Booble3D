@@ -8,10 +8,10 @@ public class CannonArrow : MonoBehaviour {
 
     [SerializeField]
     public GameObject bubblePrefab;
-    //[SerializeField]
-    //public AudioSource launchSound;
-    //[SerializeField]
-    //public AudioSource ready;
+    [SerializeField]
+    public AudioSource launchSound;
+    [SerializeField]
+    public AudioSource turningGears;
     //public Transform cannonBase;
     public Vector3 spawnPosition;
 
@@ -34,19 +34,38 @@ public class CannonArrow : MonoBehaviour {
         if (Input.GetKey(KeyCode.RightArrow))
         {
             if (transform.rotation.eulerAngles.y < 60 || transform.rotation.eulerAngles.y > 270)
+            {
                 rotation += 150 * Time.deltaTime;
+                if (!turningGears.isPlaying)
+                    turningGears.Play();
+            }else
+            {
+                if (turningGears.isPlaying)
+                    turningGears.Stop();
+            }
         }
         else if (Input.GetKey(KeyCode.LeftArrow))
         {
             if (transform.rotation.eulerAngles.y < 90 || transform.rotation.eulerAngles.y > 300)
+            {
                 rotation -= 150 * Time.deltaTime;
+                if(!turningGears.isPlaying)
+                    turningGears.Play();
+            }else
+            {
+                if (turningGears.isPlaying)
+                    turningGears.Stop();
+            }
         }
         else if (Input.GetKeyUp(KeyCode.UpArrow) && !hasLaunchedBall || (Time.time - lastShotTimeStamp > 5))
         {
             hasLaunchedBall = true;
             lastShotTimeStamp = Time.time;
             nextBubble.GetComponent<Bubble>().launch(transform.rotation.eulerAngles.y);
-            //launchSound.Play();
+            launchSound.Play();
+        }else {
+            if (turningGears.isPlaying)
+                turningGears.Stop();
         }
 
         transform.Rotate(Vector3.up, rotation);
