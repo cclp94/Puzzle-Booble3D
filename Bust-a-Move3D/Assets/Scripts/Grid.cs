@@ -67,14 +67,28 @@ public class Grid : MonoBehaviour {
     private GameObject[,] bubbleGrid;
 
     void Start () {
+        hangingBubbleToDestroy = new List<GameObject>();
         bubbleGrid = new GameObject[NumberOfRows, NumberOfColumns];
         createGrid();
         timesFired = 0;
     }
 	
 	void Update () {
-		
+        CanPlay();
+            
 	}
+
+    private void CanPlay(){
+        bool canPlay = true;
+        foreach(GameObject go in hangingBubbleToDestroy){
+            if(go != null){
+                canPlay = false;
+                break;
+            }
+                
+        }
+        cannonPoiter.SendMessage("SetGridClear", canPlay);
+    }
 
     private void createGrid()
     {
@@ -191,12 +205,6 @@ public class Grid : MonoBehaviour {
         List<Vector2> done = new List<Vector2>();
         toBeAnalysed.Add(new Vector2(row, col));
         FindCluster(ref toBeAnalysed, ref done);
-        //string debugClust = "";
-        /*foreach (Vector2 c in done)
-        {
-            debugClust += "(" + c.x + ", " + c.y + ")\t";
-        }*/
-        //Debug.Log(debugClust);
         if (done.Count > 2)
         {
             addPoints(done.Count * 10);
@@ -220,7 +228,7 @@ public class Grid : MonoBehaviour {
         }
         return connected;
     }
-
+    private List<GameObject> hangingBubbleToDestroy;
     private void CheckHangingBubbles(ref List<Vector2> done)
     {
         //Debug.Log("Check hanging");
@@ -262,11 +270,13 @@ public class Grid : MonoBehaviour {
 
     private void DropCluster(ref List<Vector2> hanging)
     {
+        hangingBubbleToDestroy = new List<GameObject>();
         addPoints((int)Math.Pow(2.0, hanging.Count) * 10);
         foreach (Vector2 bubble in hanging)
         {
             int row = (int)bubble.x, col = (int)bubble.y;
             GameObject go = bubbleGrid[row, col];
+            hangingBubbleToDestroy.Add(go);
             bubbleGrid[row, col] = null;
             go.SendMessage("DropBubble");
         }
@@ -357,5 +367,10 @@ public class Grid : MonoBehaviour {
         lastCeilRow.transform.localPosition = new Vector3(-0.03f,0.0f, +bubbleOffset1);
         lastCeilRow.transform.SetParent(null);
         //rowBlockedSound.Play();
+    }
+
+    public void LaunchedBubbleDestroyed(){
+        print("Grid update cannon");
+        cannonPoiter.GetComponent<CannonArrow>().updateQueue(true);
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour {
 
     private static LevelManager _instance;
-
+    
     [SerializeField]
     public GameObject scoreBoard;
 
@@ -44,25 +44,19 @@ public class LevelManager : MonoBehaviour {
     void loadScene(string name)
     {
         bool isMenu = name == "Menu";
+        if(isMenu)
+            GameScore.Instance.resetScore();
         UnityEngine.SceneManagement.SceneManager.LoadScene(name);
         gameObject.SetActive(isMenu);
         scoreBoard.SetActive(!isMenu);
     }
 
     public void gameWon(string sceneLoaded){
-        if (sceneLoaded.Equals("level1"))
-        {
-            // Go to level 2
-            loadScene("level2");
-        }
-        else if (sceneLoaded.Equals("level2"))
-        {
-            // return to main menu
+            // Show score
             scoreBoard.SetActive(false);
-            loadScene("Menu");
-            GameScore.Instance.resetScore();
-            gameObject.SetActive(true);
-        }
+
+            GameScore.Instance.checkHighScore();
+            loadScene("ScoreScene");
     }
 
     public void gameLost()

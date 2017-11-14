@@ -12,8 +12,7 @@ public class CannonArrow : MonoBehaviour {
     public AudioSource launchSound;
     [SerializeField]
     public AudioSource turningGears;
-    //public Transform cannonBase;
-    public Vector3 spawnPosition;
+    public Transform spawnPosition;
 
     private GameObject nextBubble;
     private GameObject queueBubble;
@@ -33,9 +32,9 @@ public class CannonArrow : MonoBehaviour {
         rotation = 0.0f;
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            if (transform.rotation.eulerAngles.y < 60 || transform.rotation.eulerAngles.y > 270)
+            if (transform.rotation.eulerAngles.y < 50 || transform.rotation.eulerAngles.y > 280)
             {
-                rotation += 150 * Time.deltaTime;
+                rotation += 100 * Time.deltaTime;
                 if (!turningGears.isPlaying)
                     turningGears.Play();
             }else
@@ -46,9 +45,9 @@ public class CannonArrow : MonoBehaviour {
         }
         else if (Input.GetKey(KeyCode.LeftArrow))
         {
-            if (transform.rotation.eulerAngles.y < 90 || transform.rotation.eulerAngles.y > 300)
+            if (transform.rotation.eulerAngles.y < 80 || transform.rotation.eulerAngles.y > 310)
             {
-                rotation -= 150 * Time.deltaTime;
+                rotation -= 100 * Time.deltaTime;
                 if(!turningGears.isPlaying)
                     turningGears.Play();
             }else
@@ -57,7 +56,7 @@ public class CannonArrow : MonoBehaviour {
                     turningGears.Stop();
             }
         }
-        else if (Input.GetKeyUp(KeyCode.UpArrow) && !hasLaunchedBall || (Time.time - lastShotTimeStamp > 5))
+        else if (Input.GetKeyUp(KeyCode.UpArrow) && !hasLaunchedBall && IsGridClear() &&!updateQueueAnimationSwitch || Time.time - lastShotTimeStamp > 10)
         {
             hasLaunchedBall = true;
             lastShotTimeStamp = Time.time;
@@ -68,7 +67,43 @@ public class CannonArrow : MonoBehaviour {
                 turningGears.Stop();
         }
 
+        if(updateQueueAnimation){
+			
+            queueBubble.transform.position = spawnPosition.position;
+			float scale = 10f * Time.deltaTime;
+            if (queueBubble.transform.localScale.x < 2.2)
+            {
+                if (nextBubble.transform.localScale.x <= Vector3.zero.x || updateQueueAnimationSwitch)
+                {
+                    updateQueueAnimationSwitch = true;
+                    nextBubble.transform.position = transform.position;
+                    nextBubble.transform.localScale += new Vector3(scale, scale, scale);
+                    queueBubble.SetActive(true);
+                    queueBubble.transform.localScale += new Vector3(scale, scale, scale);
+                }
+                else
+                {
+
+                    nextBubble.transform.localScale -= new Vector3(scale, scale, scale);
+                }
+            }else{
+                updateQueueAnimationSwitch = false;
+				nextBubble.transform.localScale = new Vector3(2.2f, 2.2f, 2.2f);
+                updateQueueAnimation = false;
+				queueBubble.transform.localScale = new Vector3(2.2f, 2.2f, 2.2f);
+            }
+
+        }
+
         transform.Rotate(Vector3.up, rotation);
+    }
+    private bool isGridClear;
+    public void SetGridClear(bool canPlay){
+        isGridClear = canPlay;
+    }
+
+    public bool IsGridClear(){
+        return isGridClear;
     }
 
     private void InstantiateBubbles()
@@ -79,21 +114,30 @@ public class CannonArrow : MonoBehaviour {
 
         queueBubble = Instantiate(bubblePrefab);
         queueBubble.GetComponent<Bubble>().setColor(Random.Range(0, 6));
-        queueBubble.transform.position = spawnPosition;
+        queueBubble.transform.position = spawnPosition.position;
     }
 
-    private void updateQueue()
+    public void updateQueue()
     {
-        if (nextBubble.GetComponent<Bubble>().hitTarget())
-        {
-            nextBubble = queueBubble;
-            nextBubble.transform.position = transform.position;
-
-            queueBubble = Instantiate(bubblePrefab);
-            queueBubble.GetComponent<Bubble>().setColor(Random.Range(0, 6));
-            queueBubble.transform.position = spawnPosition;
-
-            hasLaunchedBall = false;
-        }
+        updateQueue(false);
     }
+    private bool updateQueueAnimation;
+    private bool updateQueueAnimationSwitch;
+	public void updateQueue(bool force)
+	{
+		print("Cannon: update queue,force="+force+", " + nextBubble);
+        if (force)
+            Destroy(nextBubble);
+        if (force || nextBubble.GetComponent<Bubble>().hitTarget())
+		{
+            updateQueueAnimation = true;
+			nextBubble = queueBubble;
+
+			queueBubble = Instantiate(bubblePrefab);
+			queueBubble.GetComponent<Bubble>().setColor(Random.Range(0, 6));
+            queueBubble.transform.localScale = Vector3.zero;
+            queueBubble.SetActive(false);
+			hasLaunchedBall = false;
+		}
+	}
 }

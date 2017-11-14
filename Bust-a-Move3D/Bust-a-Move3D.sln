@@ -1,7 +1,7 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bust-a-Move3D", "Assembly-CSharp.csproj", "{01FF34D2-5DEA-70F9-7689-1C851BE42144}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio for Mac
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bust-a-Move3D", "Bust-a-Move3D.csproj", "{44E1AD1C-8A84-0CF6-F062-E0529EB0F328}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,15 +9,12 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{01FF34D2-5DEA-70F9-7689-1C851BE42144}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{01FF34D2-5DEA-70F9-7689-1C851BE42144}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{01FF34D2-5DEA-70F9-7689-1C851BE42144}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{01FF34D2-5DEA-70F9-7689-1C851BE42144}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44E1AD1C-8A84-0CF6-F062-E0529EB0F328}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44E1AD1C-8A84-0CF6-F062-E0529EB0F328}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44E1AD1C-8A84-0CF6-F062-E0529EB0F328}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44E1AD1C-8A84-0CF6-F062-E0529EB0F328}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Assembly-CSharp.csproj
 	EndGlobalSection
 EndGlobal

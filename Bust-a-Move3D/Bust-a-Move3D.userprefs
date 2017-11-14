@@ -1,12 +1,14 @@
 ﻿<Properties StartupConfiguration="{44E1AD1C-8A84-0CF6-F062-E0529EB0F328}|">
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/CannonArrow.cs">
     <Files>
-      <File FileName="Assets/Scripts/CannonArrow.cs" Line="37" Column="50" />
-      <File FileName="Assets/Scripts/Bubble.cs" Line="130" Column="63" />
-      <File FileName="Assets/Scripts/Grid.cs" Line="317" Column="123" />
-      <File FileName="Assets/Wall.cs" Line="33" Column="12" />
-      <File FileName="Assets/Scripts/WallMesh.cs" Line="15" Column="61" />
-      <File FileName="Assets/Scripts/Spline.cs" Line="226" Column="48" />
+      <File FileName="Assets/Scripts/CannonArrow.cs" Line="68" Column="10" />
+      <File FileName="Assets/Scripts/Bubble.cs" Line="47" Column="73" />
+      <File FileName="Assets/Scripts/Grid.cs" Line="77" Column="19" />
+      <File FileName="Assets/Scripts/WallMesh.cs" Line="15" Column="44" />
+      <File FileName="Assets/Scripts/LevelManager.cs" Line="48" Column="45" />
+      <File FileName="Assets/Scripts/GameScore.cs" Line="61" Column="14" />
+      <File FileName="Assets/Scripts/EndGameScore.cs" Line="42" Column="24" />
+      <File FileName="Assets/PauseMenu.cs" Line="44" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

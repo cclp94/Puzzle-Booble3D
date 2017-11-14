@@ -11,12 +11,16 @@ public class GameScore : MonoBehaviour {
 
     private int scoreAmount;
 
+    private int highScore;
+
     public static GameScore Instance
     {
         get
         {
             if (_instance == null)
+            {
                 _instance = new GameScore();
+            }
             return _instance;
         }
     }
@@ -25,6 +29,7 @@ public class GameScore : MonoBehaviour {
     {
         if (GameScore.Instance == null)
         {
+            highScore = 0;
             _instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
@@ -39,13 +44,21 @@ public class GameScore : MonoBehaviour {
     void Start() {
         scoreAmount = 0;
     }
-	
-	// Update is called once per frame
+
+    // Update is called once per frame
+    private bool mPaused;
 	void Update () {
         scoreText.text = scoreAmount.ToString("D9");
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            LevelManager.Instance.onMainMenuLevelChoose("Menu");
+            mPaused = !mPaused;
+            if(mPaused){
+                Time.timeScale = 0;
+                PauseMenu.Instance.gameObject.SetActive(true);
+            }else{
+				Time.timeScale = 1;
+				PauseMenu.Instance.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -59,8 +72,17 @@ public class GameScore : MonoBehaviour {
         return scoreAmount;
     }
 
+    public int getHighScore(){
+        return highScore;
+    }
+
     public void resetScore()
     {
         scoreAmount = 0;
+    }
+
+    public void checkHighScore(){
+        if (scoreAmount > highScore)
+            highScore = scoreAmount;
     }
 }
